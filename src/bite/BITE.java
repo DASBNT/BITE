@@ -6,8 +6,7 @@ import java.util.ArrayList;
 public class BITE {
 
     public static void main(String[] args) {
-        //comentario para pull
-        //comentario 2
+        
     }
     
 }
