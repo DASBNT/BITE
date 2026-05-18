@@ -6,14 +6,18 @@ import java.util.LinkedList;
 import java.util.ArrayList;
 
 public class Restaurante {
-    private LinkedList<Mesa> mesas = new LinkedList<>();
+    private ArrayList<Mesa> mesas = new ArrayList<>();
     
     public void addMesa(int cantidadMesas,int capacidad){
         Mesa e = new Mesa(capacidad);
         for(int i = 0;i<cantidadMesas;i++){
             mesas.add(e);
-            //System.out.println("Se ha agregado una Mesa con capacidad de " + capacidad + " personas");
-            //sasasasasas
+        }
+    }
+        public void deleteMesa(int cantidadMesas,int capacidad){
+        Mesa e = new Mesa(capacidad);
+        for(int i = 0;i<cantidadMesas;i++){
+            mesas.remove(e);
         }
     }
 }
