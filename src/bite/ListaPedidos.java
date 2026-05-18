@@ -20,4 +20,13 @@ public class ListaPedidos {
         return facturas;
     }
     
+    public void HacerFactura(int numero_pedido){
+        System.out.println("Pedido # " + numero_pedido);
+        for (int i = 0; i < facturas.get(numero_pedido).getFactura().size(); i++) {
+            System.out.println(facturas.get(numero_pedido).getFactura().get(i).getNombre());
+            System.out.print(" : " + facturas.get(numero_pedido).getFactura().get(i).getPrecio());
+            System.out.println(" INC : " + facturas.get(numero_pedido).getFactura().get(i).getPrecio()*0.08);
+        }
+        System.out.println("El total es : " + facturas.get(numero_pedido).CalcularTotal());
+    }
 }

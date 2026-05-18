@@ -20,6 +20,10 @@ public class Pedido extends Base {
         this.cliente = cliente;
     }
 
+    public ArrayList<Producto> getFactura() {
+        return factura;
+    }
+    
     public String getObservaciones() {
         return observaciones;
     }
@@ -73,13 +77,4 @@ public class Pedido extends Base {
         return Total;
     }
     
-    public void HacerFactura(int numero_pedido){
-        System.out.println("Pedido # " + numero_pedido);  
-        for (Producto producto : factura) {
-            System.out.println(producto.getNombre());
-            System.out.print(" : " + producto.getPrecio());
-            System.out.println(" INC : " + producto.getPrecio()*0.08);
-        }
-        System.out.println("El total es : " + CalcularTotal());
-    }
 }
