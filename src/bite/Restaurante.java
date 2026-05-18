@@ -13,6 +13,7 @@ public class Restaurante {
         for(int i = 0;i<cantidadMesas;i++){
             mesas.add(e);
             //System.out.println("Se ha agregado una Mesa con capacidad de " + capacidad + " personas");
+            //sasasasasas
         }
     }
 }
