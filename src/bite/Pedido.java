@@ -1,7 +1,6 @@
 
 package bite;
 
-import java.util.Scanner;
 import java.util.List;
 import java.util.LinkedList;
 import java.util.ArrayList;
@@ -12,9 +11,6 @@ public class Pedido extends Base {
     private String estado;
     private String hora;
     private Cliente cliente;
-    private int tipo_de_pago;
-    
-    Scanner entrada = new Scanner(System.in);
     
     public Pedido(String observaciones, String estado, String hora, Cliente cliente, String nombre, boolean Disponibilidad) {
         super(nombre, Disponibilidad);
@@ -76,31 +72,6 @@ public class Pedido extends Base {
         double Total = CalcularSubtotal() + CalcularSubtotal() * 0.08;
         return Total;
     }
-    
-    public double Impuesto(){
-        System.out.println("Con que vas a pagar : efectivo(1), tarjeta(2), tranferencia(3)");
-        tipo_de_pago = entrada.nextInt();
-        double impuesto = 0;
-        while (tipo_de_pago > 3 || tipo_de_pago < 1){
-        switch (tipo_de_pago) {
-            case 1:
-                impuesto = 0;
-                break;
-            case 2:
-                impuesto = 0.025;
-                break;
-            case 3:
-                impuesto = 0;
-                break;
-            default:
-                System.out.println("Numero no valido, escribir un numero valido");
-                System.out.println("Con que vas a pagar : efectivo(1), tarjeta(2), tranferencia(3)");
-                tipo_de_pago = entrada.nextInt();
-                break;
-        }
-    }   
-        return impuesto*CalcularTotal();
-}
     
     public void HacerFactura(int numero_pedido){
         System.out.println("Pedido # " + numero_pedido);  

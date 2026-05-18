@@ -15,12 +15,9 @@ public class ListaPedidos {
     public void deletePedido(Pedido pedido){
         facturas.remove(pedido);
     }
-    
-    public double CalcularGananciasDia(){
-        double total_dia = 0;
-        for(Pedido pedido : facturas){
-            total_dia = pedido.CalcularTotal() - pedido.Impuesto();
-        }
-        return total_dia;
+
+    public ArrayList<Pedido> getFacturas() {
+        return facturas;
     }
+    
 }

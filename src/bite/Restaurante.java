@@ -20,4 +20,9 @@ public class Restaurante {
             mesas.remove(e);
         }
     }
+
+    public Mesa getMesa(int mesa) {
+        return mesas.get(mesa);
+    }
+        
 }
