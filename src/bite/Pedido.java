@@ -11,6 +11,7 @@ public class Pedido extends Base {
     private String estado;
     private String hora;
     private Cliente cliente;
+    private int tipo_de_pago;
     
     public Pedido(String observaciones, String estado, String hora, Cliente cliente, String nombre, boolean Disponibilidad) {
         super(nombre, Disponibilidad);
@@ -62,6 +63,14 @@ public class Pedido extends Base {
     
     public void deleteProducto(Producto producto){
         factura.remove(producto);
+    }
+    
+    public int getTipo_de_pago() {
+        return tipo_de_pago;
+    }
+
+    public void setTipo_de_pago(int tipo_de_pago) {
+        this.tipo_de_pago = tipo_de_pago;
     }
     
     public double CalcularSubtotal(){

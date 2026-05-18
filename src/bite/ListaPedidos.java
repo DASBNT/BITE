@@ -16,8 +16,12 @@ public class ListaPedidos {
         facturas.remove(pedido);
     }
 
-    public ArrayList<Pedido> getFacturas() {
-        return facturas;
+    public Pedido getFacturas(int numero_pedido) {
+        return facturas.get(numero_pedido);
+    }
+    
+    public int getFacturasSize() {
+        return facturas.size();
     }
     
     public void HacerFactura(int numero_pedido){
