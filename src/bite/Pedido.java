@@ -64,12 +64,16 @@ public class Pedido extends Base {
         factura.remove(producto);
     }
     
-    public double CalcularTotal(){
+    public double CalcularSubtotal(){
         double Subtotal = 0;
         for (Producto producto : factura){
             Subtotal = Subtotal + producto.getPrecio();
         }
-        double Total = Subtotal + Subtotal * 0.08;
+        return Subtotal;
+    }
+    
+    public double CalcularTotal(){
+        double Total = CalcularSubtotal() + CalcularSubtotal() * 0.08;
         return Total;
     }
     
