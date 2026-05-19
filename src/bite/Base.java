@@ -1,7 +1,11 @@
 
 package bite;
 
-public abstract class Base {
+import java.io.Serializable;
+
+public abstract class Base implements Serializable {
+    private static final long serialVersionUID = 1L;
+
     private String nombre;
     private boolean Disponibilidad;
 

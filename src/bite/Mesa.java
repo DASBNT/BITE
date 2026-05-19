@@ -1,13 +1,15 @@
 package bite;
 
-import java.util.List;
+import java.io.Serializable;
+import java.util.Collections;
 import java.util.LinkedList;
-import java.util.ArrayList;
+import java.util.List;
 
-public class Mesa {
+public class Mesa implements Serializable {
+    private static final long serialVersionUID = 1L;
     private int capacidad;
     private LinkedList<Cliente> puestos = new LinkedList<>();
-    
+
     public Mesa(int capacidad) {
         this.capacidad = capacidad;
     }
@@ -21,24 +23,44 @@ public class Mesa {
     }
 
     public int getPuestos() {
-    return (capacidad - puestos.size()); 
+        return capacidad - puestos.size();
     }
-    
+
+    public int getOcupados() {
+        return puestos.size();
+    }
+
+    public boolean isFull() {
+        return puestos.size() >= capacidad;
+    }
+
     public void EstadoMesa() {
-        if (getPuestos() == 0){
+        if (getPuestos() == 0) {
             System.out.println("No sobran puestos en la Mesa");
-        }
-        else {
+        } else {
             System.out.println("Sobran " + getPuestos() + " puestos en la Mesa");
         }
     }
-    
-    public void addCliente(Cliente cliente){
+
+    public void addCliente(Cliente cliente) {
+        if (cliente == null) {
+            return;
+        }
+        if (!isFull() && !puestos.contains(cliente)) {
+            puestos.add(cliente);
+        }
+    }
+
+    public void deleteCliente(Cliente cliente) {
         puestos.remove(cliente);
     }
-    
-    public void deleteCliente(Cliente cliente){
-        puestos.remove(cliente);
+
+    public List<Cliente> getClientes() {
+        return Collections.unmodifiableList(puestos);
     }
-    
+
+    @Override
+    public String toString() {
+        return "Mesa(capacidad=" + capacidad + ", libres=" + getPuestos() + ", ocupados=" + getOcupados() + ")";
+    }
 }

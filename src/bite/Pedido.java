@@ -1,18 +1,16 @@
-
 package bite;
 
-import java.util.List;
-import java.util.LinkedList;
 import java.util.ArrayList;
+import java.util.List;
 
 public class Pedido extends Base {
-    private ArrayList<Producto> factura = new ArrayList<>();
+    private ArrayList<LineaPedido> factura = new ArrayList<>();
     private String observaciones;
     private String estado;
     private String hora;
     private Cliente cliente;
     private int tipo_de_pago;
-    
+
     public Pedido(String observaciones, String estado, String hora, Cliente cliente, String nombre, boolean Disponibilidad) {
         super(nombre, Disponibilidad);
         this.observaciones = observaciones;
@@ -21,10 +19,10 @@ public class Pedido extends Base {
         this.cliente = cliente;
     }
 
-    public ArrayList<Producto> getFactura() {
+    public List<LineaPedido> getFactura() {
         return factura;
     }
-    
+
     public String getObservaciones() {
         return observaciones;
     }
@@ -56,15 +54,24 @@ public class Pedido extends Base {
     public void setCliente(Cliente cliente) {
         this.cliente = cliente;
     }
-    
-    public void addProducto(Producto producto){
-        factura.add(producto);
+
+    public void addProducto(Producto producto, int cantidad) {
+        if (producto == null || cantidad <= 0) {
+            return;
+        }
+        for (LineaPedido linea : factura) {
+            if (linea.getProducto().equals(producto)) {
+                linea.setCantidad(linea.getCantidad() + cantidad);
+                return;
+            }
+        }
+        factura.add(new LineaPedido(producto, cantidad));
     }
-    
-    public void deleteProducto(Producto producto){
-        factura.remove(producto);
+
+    public void deleteProducto(LineaPedido linea) {
+        factura.remove(linea);
     }
-    
+
     public int getTipo_de_pago() {
         return tipo_de_pago;
     }
@@ -72,18 +79,26 @@ public class Pedido extends Base {
     public void setTipo_de_pago(int tipo_de_pago) {
         this.tipo_de_pago = tipo_de_pago;
     }
-    
-    public double CalcularSubtotal(){
-        double Subtotal = 0;
-        for (Producto producto : factura){
-            Subtotal = Subtotal + producto.getPrecio();
+
+    public double CalcularSubtotal() {
+        double subtotal = 0;
+        for (LineaPedido linea : factura) {
+            subtotal += linea.getSubtotal();
         }
-        return Subtotal;
+        return subtotal;
     }
-    
-    public double CalcularTotal(){
-        double Total = CalcularSubtotal() + CalcularSubtotal() * 0.08;
-        return Total;
+
+    public double CalcularTotal() {
+        return CalcularSubtotal() * 1.08;
     }
-    
+
+    public double getTotal() {
+        return CalcularTotal();
+    }
+
+    @Override
+    public String toString() {
+        String clienteNombre = cliente != null ? cliente.getNombre() : "Sin cliente";
+        return getNombre() + " - " + clienteNombre + " [" + estado + "]";
+    }
 }

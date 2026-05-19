@@ -1,6 +1,10 @@
 package bite;
 
-public class Producto extends Base {
+import java.io.Serializable;
+
+public class Producto extends Base implements Serializable {
+    private static final long serialVersionUID = 1L;
+
     private String tipo;
     private double precio;
 
@@ -26,4 +30,8 @@ public class Producto extends Base {
         this.precio = precio;
     }
 
+    @Override
+    public String toString() {
+        return getNombre() + " [" + tipo + "] $" + String.format("%.2f", precio) + " (" + (isDisponibilidad() ? "Disponible" : "No disponible") + ")";
+    }
 }
