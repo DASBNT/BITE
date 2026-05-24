@@ -1,5 +1,8 @@
 package bite;
 
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.io.Serializable;
 import java.util.Collections;
 import java.util.LinkedList;
@@ -8,10 +11,19 @@ import java.util.List;
 public class Mesa implements Serializable {
     private static final long serialVersionUID = 1L;
     private int capacidad;
-    private LinkedList<Cliente> puestos = new LinkedList<>();
+    private transient LinkedList<Cliente> puestos = new LinkedList<>();
 
     public Mesa(int capacidad) {
         this.capacidad = capacidad;
+    }
+
+    private void writeObject(ObjectOutputStream out) throws IOException {
+        out.defaultWriteObject();
+    }
+
+    private void readObject(ObjectInputStream in) throws IOException, ClassNotFoundException {
+        in.defaultReadObject();
+        puestos = new LinkedList<>();
     }
 
     public int getCapacidad() {
