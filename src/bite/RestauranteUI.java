@@ -10,74 +10,74 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 public class RestauranteUI extends JFrame {
-    private Restaurante restaurante;
+    private Restaurante baseRestaurante;
 
-    private DefaultListModel<Mesa> mesaModel = new DefaultListModel<>();
-    private DefaultListModel<Cliente> clienteModel = new DefaultListModel<>();
-    private DefaultListModel<Producto> productoModel = new DefaultListModel<>();
-    private DefaultListModel<Pedido> pedidoModel = new DefaultListModel<>();
-    private DefaultListModel<LineaPedido> pedidoItemsModel = new DefaultListModel<>();
-    private DefaultListModel<Cliente> mesaClientesModel = new DefaultListModel<>();
+    private DefaultListModel<Mesa> modeloMesas = new DefaultListModel<>();
+    private DefaultListModel<Cliente> modeloClientes = new DefaultListModel<>();
+    private DefaultListModel<Producto> modeloProductos = new DefaultListModel<>();
+    private DefaultListModel<Pedido> modeloPedidos = new DefaultListModel<>();
+    private DefaultListModel<LineaPedido> modeloLineasPedido = new DefaultListModel<>();
+    private DefaultListModel<Cliente> modeloClientesEnMesa = new DefaultListModel<>();
 
-    private JList<Mesa> mesaList = new JList<>(mesaModel);
-    private JList<Cliente> mesaClientesList = new JList<>(mesaClientesModel);
-    private JList<Cliente> clienteList = new JList<>(clienteModel);
-    private JComboBox<Cliente> mesaClienteCombo = new JComboBox<>();
-    private JList<Producto> productoList = new JList<>(productoModel);
-    private JList<Pedido> pedidoList = new JList<>(pedidoModel);
-    private JList<LineaPedido> pedidoItemsList = new JList<>(pedidoItemsModel);
+    private JList<Mesa> listadoMesas = new JList<>(modeloMesas);
+    private JList<Cliente> listadoClientesMesa = new JList<>(modeloClientesEnMesa);
+    private JList<Cliente> listadoClientes = new JList<>(modeloClientes);
+    private JComboBox<Cliente> comboClienteMesa = new JComboBox<>();
+    private JList<Producto> listadoProductos = new JList<>(modeloProductos);
+    private JList<Pedido> listadoPedidos = new JList<>(modeloPedidos);
+    private JList<LineaPedido> listadoLineasPedido = new JList<>(modeloLineasPedido);
 
-    private JTextField mesaCapacidadField = new JTextField(8);
-    private JLabel mesaInfoLabel = new JLabel("Seleccione una mesa");
+    private JTextField campoCapacidadMesa = new JTextField(8);
+    private JLabel etiquetaMesaInfo = new JLabel("Seleccione una mesa");
 
-    private JTextField clienteNombreField = new JTextField(12);
-    private JLabel clienteMesaAsignadaLabel = new JLabel("No asignado");
-    private JComboBox<Mesa> clienteMesaCombo = new JComboBox<>();
+    private JTextField campoNombreCliente = new JTextField(12);
+    private JLabel etiquetaMesaCliente = new JLabel("No asignado");
+    private JComboBox<Mesa> comboMesasCliente = new JComboBox<>();
 
-    private JTextField productoNombreField = new JTextField(12);
-    private JTextField productoTipoField = new JTextField(12);
-    private JTextField productoPrecioField = new JTextField(8);
-    private JCheckBox productoDisponibleCheck = new JCheckBox("Disponible");
+    private JTextField campoNombreProducto = new JTextField(12);
+    private JTextField campoTipoProducto = new JTextField(12);
+    private JTextField campoPrecioProducto = new JTextField(8);
+    private JCheckBox casillaDisponibleProducto = new JCheckBox("Disponible");
 
-    private JComboBox<Cliente> orderClienteCombo = new JComboBox<>();
-    private JTextField orderEstadoField = new JTextField("Pendiente", 12);
-    private JTextField orderHoraField = new JTextField(8);
-    private JTextArea orderObservacionesArea = new JTextArea(3, 18);
-    private JComboBox<Producto> orderProductoCombo = new JComboBox<>();
-    private JTextField orderCantidadField = new JTextField("1", 4);
-    private JLabel orderTotalLabel = new JLabel("$0.00");
-    private JComboBox<String> pagoCombo = new JComboBox<>(new String[]{"Efectivo", "Tarjeta", "Transferencia"});
-    private DefaultComboBoxModel<Pedido> facturaPedidoModel = new DefaultComboBoxModel<>();
-    private JComboBox<Pedido> facturaPedidoCombo = new JComboBox<>(facturaPedidoModel);
-    private JTextArea facturaArea = new JTextArea(10, 32);
-    private JLabel totalDiaLabel = new JLabel("$0.00");
+    private JComboBox<Cliente> comboClientePedido = new JComboBox<>();
+    private JTextField campoEstadoPedido = new JTextField("Pendiente", 12);
+    private JTextField campoHoraPedido = new JTextField(8);
+    private JTextArea areaObservacionesPedido = new JTextArea(3, 18);
+    private JComboBox<Producto> comboProductoPedido = new JComboBox<>();
+    private JTextField campoCantidadProducto = new JTextField("1", 4);
+    private JLabel etiquetaTotalPedido = new JLabel("$0.00");
+    private JComboBox<String> comboPago = new JComboBox<>(new String[]{"Efectivo", "Tarjeta", "Transferencia"});
+    private DefaultComboBoxModel<Pedido> modeloPedidoFactura = new DefaultComboBoxModel<>();
+    private JComboBox<Pedido> comboPedidoFactura = new JComboBox<>(modeloPedidoFactura);
+    private JTextArea areaFactura = new JTextArea(10, 32);
+    private JLabel etiquetaTotalDia = new JLabel("$0.00");
 
     public RestauranteUI(Restaurante restaurante) {
         super("Gestión de Restaurante");
-        this.restaurante = restaurante;
+        this.baseRestaurante = restaurante;
 
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setSize(930, 620);
         setLocationRelativeTo(null);
         setLayout(new BorderLayout());
 
-        JTabbedPane tabs = new JTabbedPane();
-        tabs.addTab("Mesas", createMesasPanel());
-        tabs.addTab("Clientes", createClientesPanel());
-        tabs.addTab("Productos", createProductosPanel());
-        tabs.addTab("Pedidos", createPedidosPanel());
-        tabs.addTab("Facturación", createFacturacionPanel());
+        JTabbedPane pestañas = new JTabbedPane();
+        pestañas.addTab("Mesas", crearPanelMesas());
+        pestañas.addTab("Clientes", crearPanelClientes());
+        pestañas.addTab("Productos", crearPanelProductos());
+        pestañas.addTab("Pedidos", crearPanelPedidos());
+        pestañas.addTab("Facturación", crearPanelFacturacion());
 
-        add(tabs, BorderLayout.CENTER);
+        add(pestañas, BorderLayout.CENTER);
 
-        reloadAll();
+        actualizarPantalla();
     }
 
-    private JPanel createMesasPanel() {
+    private JPanel crearPanelMesas() {
         JPanel panel = new JPanel(new BorderLayout(10, 10));
 
-        mesaList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-        mesaList.setCellRenderer(new DefaultListCellRenderer() {
+        listadoMesas.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+        listadoMesas.setCellRenderer(new DefaultListCellRenderer() {
             @Override
             public Component getListCellRendererComponent(JList<?> list, Object value, int index, boolean isSelected, boolean cellHasFocus) {
                 super.getListCellRendererComponent(list, value, index, isSelected, cellHasFocus);
@@ -87,33 +87,33 @@ public class RestauranteUI extends JFrame {
                 return this;
             }
         });
-        mesaList.addListSelectionListener(new ListSelectionListener() {
+        listadoMesas.addListSelectionListener(new ListSelectionListener() {
             @Override
             public void valueChanged(ListSelectionEvent e) {
                 if (!e.getValueIsAdjusting()) {
-                    updateMesaSelection();
+                    actualizarSeleccionMesa();
                 }
             }
         });
 
-        JScrollPane listScroll = new JScrollPane(mesaList);
-        listScroll.setPreferredSize(new Dimension(320, 0));
-        panel.add(listScroll, BorderLayout.WEST);
+        JScrollPane listaScroll = new JScrollPane(listadoMesas);
+        listaScroll.setPreferredSize(new Dimension(320, 0));
+        panel.add(listaScroll, BorderLayout.WEST);
 
         JPanel form = new JPanel();
         form.setLayout(new BoxLayout(form, BoxLayout.Y_AXIS));
         form.setBorder(BorderFactory.createEmptyBorder(12, 12, 12, 12));
 
-        form.add(createLabelledPanel("Capacidad:", mesaCapacidadField));
+        form.add(crearPanelEtiqueta("Capacidad:", campoCapacidadMesa));
         form.add(Box.createVerticalStrut(8));
-        form.add(mesaInfoLabel);
+        form.add(etiquetaMesaInfo);
         form.add(Box.createVerticalStrut(16));
         form.add(new JLabel("Clientes en esta mesa:"));
-        JScrollPane mesaClientsScroll = new JScrollPane(mesaClientesList);
+        JScrollPane mesaClientsScroll = new JScrollPane(listadoClientesMesa);
         mesaClientsScroll.setPreferredSize(new Dimension(280, 100));
         form.add(mesaClientsScroll);
         form.add(Box.createVerticalStrut(8));
-        form.add(createLabelledPanel("Cliente:", mesaClienteCombo));
+        form.add(crearPanelEtiqueta("Cliente:", comboClienteMesa));
         form.add(Box.createVerticalStrut(8));
         JPanel mesaClientButtons = new JPanel(new FlowLayout(FlowLayout.LEFT));
         JButton assignClientButton = new JButton("Asignar cliente");
@@ -136,35 +136,35 @@ public class RestauranteUI extends JFrame {
         addButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                addMesa();
+                agregarMesa();
             }
         });
 
         updateButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                updateMesa();
+                modificarMesa();
             }
         });
 
         deleteButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                deleteMesa();
+                eliminarMesa();
             }
         });
 
         assignClientButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                assignClienteAMesa();
+                asignarClienteAMesa();
             }
         });
 
         removeClientButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                removeClienteDeMesa();
+                removerClienteDeMesa();
             }
         });
 
@@ -172,32 +172,32 @@ public class RestauranteUI extends JFrame {
         return panel;
     }
 
-    private JPanel createClientesPanel() {
+    private JPanel crearPanelClientes() {
         JPanel panel = new JPanel(new BorderLayout(10, 10));
 
-        clienteList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-        clienteList.addListSelectionListener(new ListSelectionListener() {
+        listadoClientes.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+        listadoClientes.addListSelectionListener(new ListSelectionListener() {
             @Override
             public void valueChanged(ListSelectionEvent e) {
                 if (!e.getValueIsAdjusting()) {
-                    updateClienteSelection();
+                    actualizarSeleccionCliente();
                 }
             }
         });
 
-        JScrollPane listScroll = new JScrollPane(clienteList);
-        listScroll.setPreferredSize(new Dimension(320, 0));
-        panel.add(listScroll, BorderLayout.WEST);
+        JScrollPane listaScroll = new JScrollPane(listadoClientes);
+        listaScroll.setPreferredSize(new Dimension(320, 0));
+        panel.add(listaScroll, BorderLayout.WEST);
 
         JPanel form = new JPanel();
         form.setLayout(new BoxLayout(form, BoxLayout.Y_AXIS));
         form.setBorder(BorderFactory.createEmptyBorder(12, 12, 12, 12));
 
-        form.add(createLabelledPanel("Nombre:", clienteNombreField));
+        form.add(crearPanelEtiqueta("Nombre:", campoNombreCliente));
         form.add(Box.createVerticalStrut(8));
-        form.add(createLabelledPanel("Mesa asignada:", clienteMesaAsignadaLabel));
+        form.add(crearPanelEtiqueta("Mesa asignada:", etiquetaMesaCliente));
         form.add(Box.createVerticalStrut(8));
-        form.add(createLabelledPanel("Asignar a mesa:", clienteMesaCombo));
+        form.add(crearPanelEtiqueta("Asignar a mesa:", comboMesasCliente));
         form.add(Box.createVerticalStrut(8));
         JButton assignMesaButton = new JButton("Asignar a mesa");
         form.add(assignMesaButton);
@@ -215,28 +215,28 @@ public class RestauranteUI extends JFrame {
         addButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                addCliente();
+                agregarCliente();
             }
         });
 
         updateButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                updateCliente();
+                modificarCliente();
             }
         });
 
         deleteButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                deleteCliente();
+                eliminarCliente();
             }
         });
 
         assignMesaButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                assignClienteToMesaDesdeCliente();
+                asignarClienteDesdeCliente();
             }
         });
 
@@ -244,34 +244,34 @@ public class RestauranteUI extends JFrame {
         return panel;
     }
 
-    private JPanel createProductosPanel() {
+    private JPanel crearPanelProductos() {
         JPanel panel = new JPanel(new BorderLayout(10, 10));
 
-        productoList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-        productoList.addListSelectionListener(new ListSelectionListener() {
+        listadoProductos.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+        listadoProductos.addListSelectionListener(new ListSelectionListener() {
             @Override
             public void valueChanged(ListSelectionEvent e) {
                 if (!e.getValueIsAdjusting()) {
-                    updateProductoSelection();
+                    actualizarSeleccionProducto();
                 }
             }
         });
 
-        JScrollPane listScroll = new JScrollPane(productoList);
-        listScroll.setPreferredSize(new Dimension(320, 0));
-        panel.add(listScroll, BorderLayout.WEST);
+        JScrollPane listaScroll = new JScrollPane(listadoProductos);
+        listaScroll.setPreferredSize(new Dimension(320, 0));
+        panel.add(listaScroll, BorderLayout.WEST);
 
         JPanel form = new JPanel();
         form.setLayout(new BoxLayout(form, BoxLayout.Y_AXIS));
         form.setBorder(BorderFactory.createEmptyBorder(12, 12, 12, 12));
 
-        form.add(createLabelledPanel("Nombre:", productoNombreField));
+        form.add(crearPanelEtiqueta("Nombre:", campoNombreProducto));
         form.add(Box.createVerticalStrut(8));
-        form.add(createLabelledPanel("Tipo:", productoTipoField));
+        form.add(crearPanelEtiqueta("Tipo:", campoTipoProducto));
         form.add(Box.createVerticalStrut(8));
-        form.add(createLabelledPanel("Precio:", productoPrecioField));
+        form.add(crearPanelEtiqueta("Precio:", campoPrecioProducto));
         form.add(Box.createVerticalStrut(8));
-        form.add(productoDisponibleCheck);
+        form.add(casillaDisponibleProducto);
         form.add(Box.createVerticalStrut(16));
         JPanel buttons = new JPanel(new FlowLayout(FlowLayout.LEFT));
         JButton addButton = new JButton("Añadir producto");
@@ -288,28 +288,28 @@ public class RestauranteUI extends JFrame {
         addButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                addProducto();
+                agregarProducto();
             }
         });
 
         updateButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                updateProducto();
+                modificarProducto();
             }
         });
 
         deleteButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                deleteProducto();
+                eliminarProducto();
             }
         });
 
         newMenuButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                clearMenu();
+                limpiarMenu();
             }
         });
 
@@ -317,39 +317,39 @@ public class RestauranteUI extends JFrame {
         return panel;
     }
 
-    private JPanel createPedidosPanel() {
+    private JPanel crearPanelPedidos() {
         JPanel panel = new JPanel(new BorderLayout(10, 10));
 
-        pedidoList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-        pedidoList.addListSelectionListener(new ListSelectionListener() {
+        listadoPedidos.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+        listadoPedidos.addListSelectionListener(new ListSelectionListener() {
             @Override
             public void valueChanged(ListSelectionEvent e) {
                 if (!e.getValueIsAdjusting()) {
-                    updatePedidoSelection();
+                    actualizarSeleccionPedido();
                 }
             }
         });
 
-        JScrollPane listScroll = new JScrollPane(pedidoList);
-        listScroll.setPreferredSize(new Dimension(320, 0));
-        panel.add(listScroll, BorderLayout.WEST);
+        JScrollPane listaScroll = new JScrollPane(listadoPedidos);
+        listaScroll.setPreferredSize(new Dimension(320, 0));
+        panel.add(listaScroll, BorderLayout.WEST);
 
         JPanel form = new JPanel();
         form.setLayout(new BoxLayout(form, BoxLayout.Y_AXIS));
         form.setBorder(BorderFactory.createEmptyBorder(12, 12, 12, 12));
 
-        form.add(createLabelledPanel("Cliente:", orderClienteCombo));
+        form.add(crearPanelEtiqueta("Cliente:", comboClientePedido));
         form.add(Box.createVerticalStrut(8));
-        orderHoraField.setEditable(false);
-        form.add(createLabelledPanel("Hora:", orderHoraField));
+        campoHoraPedido.setEditable(false);
+        form.add(crearPanelEtiqueta("Hora:", campoHoraPedido));
         form.add(Box.createVerticalStrut(8));
-        form.add(createLabelledPanel("Estado:", orderEstadoField));
+        form.add(crearPanelEtiqueta("Estado:", campoEstadoPedido));
         form.add(Box.createVerticalStrut(8));
-        form.add(createLabelledPanel("Observaciones:", new JScrollPane(orderObservacionesArea)));
+        form.add(crearPanelEtiqueta("Observaciones:", new JScrollPane(areaObservacionesPedido)));
         form.add(Box.createVerticalStrut(8));
-        form.add(createLabelledPanel("Producto:", orderProductoCombo));
+        form.add(crearPanelEtiqueta("Producto:", comboProductoPedido));
         form.add(Box.createVerticalStrut(4));
-        form.add(createLabelledPanel("Cantidad:", orderCantidadField));
+        form.add(crearPanelEtiqueta("Cantidad:", campoCantidadProducto));
         form.add(Box.createVerticalStrut(4));
         JPanel orderButtons = new JPanel(new FlowLayout(FlowLayout.LEFT));
         JButton addOrderButton = new JButton("Crear pedido");
@@ -361,7 +361,7 @@ public class RestauranteUI extends JFrame {
         form.add(orderButtons);
         form.add(Box.createVerticalStrut(12));
         form.add(new JLabel("Productos en el pedido:"));
-        JScrollPane itemsScroll = new JScrollPane(pedidoItemsList);
+        JScrollPane itemsScroll = new JScrollPane(listadoLineasPedido);
         itemsScroll.setPreferredSize(new Dimension(0, 140));
         form.add(itemsScroll);
         form.add(Box.createVerticalStrut(8));
@@ -374,41 +374,41 @@ public class RestauranteUI extends JFrame {
         form.add(productButtons);
         form.add(Box.createVerticalStrut(12));
         form.add(new JLabel("Total:"));
-        form.add(orderTotalLabel);
+        form.add(etiquetaTotalPedido);
         form.add(Box.createVerticalGlue());
 
         addOrderButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                createPedido();
+                crearPedido();
             }
         });
 
         updateOrderButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                savePedido();
+                guardarPedido();
             }
         });
 
         deleteOrderButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                deletePedido();
+                eliminarPedido();
             }
         });
 
         addProductButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                addProductoAPedido();
+                agregarProductoAPedido();
             }
         });
 
         removeProductButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                removeProductoDePedido();
+                removerProductoPedido();
             }
         });
 
@@ -416,16 +416,16 @@ public class RestauranteUI extends JFrame {
         return panel;
     }
 
-    private JPanel createFacturacionPanel() {
+    private JPanel crearPanelFacturacion() {
         JPanel panel = new JPanel(new BorderLayout(10, 10));
 
         JPanel form = new JPanel();
         form.setLayout(new BoxLayout(form, BoxLayout.Y_AXIS));
         form.setBorder(BorderFactory.createEmptyBorder(12, 12, 12, 12));
 
-        form.add(createLabelledPanel("Pedido:", facturaPedidoCombo));
+        form.add(crearPanelEtiqueta("Pedido:", comboPedidoFactura));
         form.add(Box.createVerticalStrut(8));
-        form.add(createLabelledPanel("Método de pago:", pagoCombo));
+        form.add(crearPanelEtiqueta("Método de pago:", comboPago));
         form.add(Box.createVerticalStrut(8));
         JButton generarFacturaButton = new JButton("Generar factura");
         JButton totalDiaButton = new JButton("Calcular total del día");
@@ -435,14 +435,14 @@ public class RestauranteUI extends JFrame {
         form.add(buttons);
         form.add(Box.createVerticalStrut(12));
         form.add(new JLabel("Factura generada:"));
-        facturaArea.setEditable(false);
-        facturaArea.setLineWrap(true);
-        facturaArea.setWrapStyleWord(true);
-        JScrollPane facturaScroll = new JScrollPane(facturaArea);
+        areaFactura.setEditable(false);
+        areaFactura.setLineWrap(true);
+        areaFactura.setWrapStyleWord(true);
+        JScrollPane facturaScroll = new JScrollPane(areaFactura);
         facturaScroll.setPreferredSize(new Dimension(0, 180));
         form.add(facturaScroll);
         form.add(Box.createVerticalStrut(12));
-        form.add(createLabelledPanel("Total del día:", totalDiaLabel));
+        form.add(crearPanelEtiqueta("Total del día:", etiquetaTotalDia));
         form.add(Box.createVerticalGlue());
 
         generarFacturaButton.addActionListener(new ActionListener() {
@@ -463,87 +463,96 @@ public class RestauranteUI extends JFrame {
         return panel;
     }
 
-    private JPanel createLabelledPanel(String labelText, Component component) {
+    private JPanel crearPanelEtiqueta(String labelText, Component component) {
         JPanel panel = new JPanel(new FlowLayout(FlowLayout.LEFT, 6, 0));
         panel.add(new JLabel(labelText));
         panel.add(component);
         return panel;
     }
 
-    private void reloadAll() {
-        reloadMesas();
-        reloadClientes();
-        reloadProductos();
-        reloadPedidos();
-        populateOrderCombos();
-        reloadFacturaPedidos();
+    private void actualizarPantalla() {
+        recargarMesas();
+        recargarClientes();
+        recargarProductos();
+        recargarPedidos();
+        llenarCombosPedido();
+        recargarPedidosFactura();
     }
 
-    private void reloadMesas() {
-        mesaModel.clear();
-        for (Mesa mesa : restaurante.getMesas()) {
-            mesaModel.addElement(mesa);
+    private void recargarMesas() {
+        modeloMesas.clear();
+        for (Mesa mesa : baseRestaurante.getMesas()) {
+            modeloMesas.addElement(mesa);
         }
-        populateClienteMesaCombo();
+        llenarComboClientesMesa();
     }
 
-    private void reloadClientes() {
-        clienteModel.clear();
-        orderClienteCombo.removeAllItems();
-        for (Cliente cliente : restaurante.getClientes()) {
-            clienteModel.addElement(cliente);
-            orderClienteCombo.addItem(cliente);
+    private void recargarClientes() {
+        modeloClientes.clear();
+        comboClientePedido.removeAllItems();
+        for (Cliente cliente : baseRestaurante.getClientes()) {
+            modeloClientes.addElement(cliente);
+            comboClientePedido.addItem(cliente);
         }
-        populateMesaClientCombo();
-        populateClienteMesaCombo();
+        llenarComboMesasCliente();
+        llenarComboClientesMesa();
     }
 
-    private void reloadProductos() {
-        productoModel.clear();
-        orderProductoCombo.removeAllItems();
-        for (Producto producto : restaurante.getMenu()) {
-            productoModel.addElement(producto);
-            orderProductoCombo.addItem(producto);
+    private void recargarProductos() {
+        modeloProductos.clear();
+        comboProductoPedido.removeAllItems();
+        for (Producto producto : baseRestaurante.getMenu()) {
+            modeloProductos.addElement(producto);
+            comboProductoPedido.addItem(producto);
         }
     }
 
-    private void reloadPedidos() {
-        pedidoModel.clear();
-        for (int i = 0; i < restaurante.getPedidos().getFacturasSize(); i++) {
-            pedidoModel.addElement(restaurante.getPedidos().getFacturas(i));
+    private void recargarPedidos() {
+        modeloPedidos.clear();
+        for (int i = 0; i < baseRestaurante.getPedidos().getFacturasSize(); i++) {
+            modeloPedidos.addElement(baseRestaurante.getPedidos().getFacturas(i));
         }
-        reloadFacturaPedidos();
+        recargarPedidosFactura();
     }
 
-    private void reloadMesaClients(Mesa mesa) {
-        mesaClientesModel.clear();
+    private void recargarClientesDeMesa(Mesa mesa) {
+        modeloClientesEnMesa.clear();
         if (mesa != null) {
             for (Cliente cliente : mesa.getClientes()) {
-                mesaClientesModel.addElement(cliente);
+                modeloClientesEnMesa.addElement(cliente);
             }
         }
     }
 
-    private void populateMesaClientCombo() {
-        mesaClienteCombo.removeAllItems();
-        for (Cliente cliente : restaurante.getClientes()) {
-            mesaClienteCombo.addItem(cliente);
+    private void recargarLineasPedido(Pedido pedido) {
+        modeloLineasPedido.clear();
+        if (pedido != null) {
+            for (LineaPedido linea : pedido.getFactura()) {
+                modeloLineasPedido.addElement(linea);
+            }
         }
     }
 
-    private void populateClienteMesaCombo() {
-        clienteMesaCombo.removeAllItems();
-        for (Mesa mesa : restaurante.getMesas()) {
-            clienteMesaCombo.addItem(mesa);
+    private void llenarComboClientesMesa() {
+        comboClienteMesa.removeAllItems();
+        for (Cliente cliente : baseRestaurante.getClientes()) {
+            comboClienteMesa.addItem(cliente);
         }
-        clienteMesaCombo.setRenderer(new DefaultListCellRenderer() {
+    }
+
+    private void llenarComboMesasCliente() {
+        comboMesasCliente.removeAllItems();
+        for (Mesa mesa : baseRestaurante.getMesas()) {
+            comboMesasCliente.addItem(mesa);
+        }
+        comboMesasCliente.setRenderer(new DefaultListCellRenderer() {
             @Override
             public Component getListCellRendererComponent(JList<?> list, Object value, int index, boolean isSelected, boolean cellHasFocus) {
                 super.getListCellRendererComponent(list, value, index, isSelected, cellHasFocus);
                 if (value instanceof Mesa) {
                     int displayIndex = index;
                     if (displayIndex < 0) {
-                        displayIndex = clienteMesaCombo.getSelectedIndex();
+                        displayIndex = comboMesasCliente.getSelectedIndex();
                     }
                     if (displayIndex >= 0) {
                         setText("Mesa " + (displayIndex + 1));
@@ -556,111 +565,111 @@ public class RestauranteUI extends JFrame {
         });
     }
 
-    private void populateOrderCombos() {
-        orderClienteCombo.removeAllItems();
-        for (Cliente cliente : restaurante.getClientes()) {
-            orderClienteCombo.addItem(cliente);
+    private void llenarCombosPedido() {
+        comboClientePedido.removeAllItems();
+        for (Cliente cliente : baseRestaurante.getClientes()) {
+            comboClientePedido.addItem(cliente);
         }
-        orderProductoCombo.removeAllItems();
-        for (Producto producto : restaurante.getMenu()) {
-            orderProductoCombo.addItem(producto);
-        }
-    }
-
-    private void reloadFacturaPedidos() {
-        facturaPedidoModel.removeAllElements();
-        for (Pedido pedido : restaurante.getPedidos().getFacturasList()) {
-            facturaPedidoModel.addElement(pedido);
-        }
-        if (facturaPedidoModel.getSize() > 0) {
-            facturaPedidoCombo.setSelectedIndex(0);
+        comboProductoPedido.removeAllItems();
+        for (Producto producto : baseRestaurante.getMenu()) {
+            comboProductoPedido.addItem(producto);
         }
     }
 
-    private void updateMesaSelection() {
-        Mesa mesa = mesaList.getSelectedValue();
+    private void recargarPedidosFactura() {
+        modeloPedidoFactura.removeAllElements();
+        for (Pedido pedido : baseRestaurante.getPedidos().getFacturasList()) {
+            modeloPedidoFactura.addElement(pedido);
+        }
+        if (modeloPedidoFactura.getSize() > 0) {
+            comboPedidoFactura.setSelectedIndex(0);
+        }
+    }
+
+    private void actualizarSeleccionMesa() {
+        Mesa mesa = listadoMesas.getSelectedValue();
         if (mesa != null) {
-            mesaCapacidadField.setText(String.valueOf(mesa.getCapacidad()));
-            mesaInfoLabel.setText("Libres: " + mesa.getPuestos() + ", Ocupados: " + mesa.getOcupados());
-            reloadMesaClients(mesa);
-            populateMesaClientCombo();
+            campoCapacidadMesa.setText(String.valueOf(mesa.getCapacidad()));
+            etiquetaMesaInfo.setText("Libres: " + mesa.getPuestos() + ", Ocupados: " + mesa.getOcupados());
+            recargarClientesDeMesa(mesa);
+            llenarComboClientesMesa();
         } else {
-            mesaCapacidadField.setText("");
-            mesaInfoLabel.setText("Seleccione una mesa");
-            mesaClientesModel.clear();
-            mesaClienteCombo.removeAllItems();
+            campoCapacidadMesa.setText("");
+            etiquetaMesaInfo.setText("Seleccione una mesa");
+            modeloClientesEnMesa.clear();
+            comboClienteMesa.removeAllItems();
         }
     }
 
-    private void updateClienteSelection() {
-        Cliente cliente = clienteList.getSelectedValue();
+    private void actualizarSeleccionCliente() {
+        Cliente cliente = listadoClientes.getSelectedValue();
         if (cliente != null) {
-            clienteNombreField.setText(cliente.getNombre());
-            int mesaIndex = restaurante.getMesaIndexOfCliente(cliente);
+            campoNombreCliente.setText(cliente.getNombre());
+            int mesaIndex = baseRestaurante.getMesaIndexOfCliente(cliente);
             if (mesaIndex >= 0) {
-                clienteMesaAsignadaLabel.setText("Mesa " + (mesaIndex + 1));
+                etiquetaMesaCliente.setText("Mesa " + (mesaIndex + 1));
             } else {
-                clienteMesaAsignadaLabel.setText("No asignado");
+                etiquetaMesaCliente.setText("No asignado");
             }
         } else {
-            clienteNombreField.setText("");
-            clienteMesaAsignadaLabel.setText("No asignado");
+            campoNombreCliente.setText("");
+            etiquetaMesaCliente.setText("No asignado");
         }
     }
 
-    private void updateProductoSelection() {
-        Producto producto = productoList.getSelectedValue();
+    private void actualizarSeleccionProducto() {
+        Producto producto = listadoProductos.getSelectedValue();
         if (producto != null) {
-            productoNombreField.setText(producto.getNombre());
-            productoTipoField.setText(producto.getTipo());
-            productoPrecioField.setText(String.valueOf(producto.getPrecio()));
-            productoDisponibleCheck.setSelected(producto.isDisponibilidad());
+            campoNombreProducto.setText(producto.getNombre());
+            campoTipoProducto.setText(producto.getTipo());
+            campoPrecioProducto.setText(String.valueOf(producto.getPrecio()));
+            casillaDisponibleProducto.setSelected(producto.isDisponibilidad());
         } else {
-            productoNombreField.setText("");
-            productoTipoField.setText("");
-            productoPrecioField.setText("");
-            productoDisponibleCheck.setSelected(false);
+            campoNombreProducto.setText("");
+            campoTipoProducto.setText("");
+            campoPrecioProducto.setText("");
+            casillaDisponibleProducto.setSelected(false);
         }
     }
 
-    private void updatePedidoSelection() {
-        Pedido pedido = pedidoList.getSelectedValue();
+    private void actualizarSeleccionPedido() {
+        Pedido pedido = listadoPedidos.getSelectedValue();
         if (pedido != null) {
-            orderClienteCombo.setSelectedItem(pedido.getCliente());
-            orderEstadoField.setText(pedido.getEstado());
-            orderHoraField.setText(pedido.getHora());
-            orderObservacionesArea.setText(pedido.getObservaciones());
-            reloadPedidoItems(pedido);
-            orderTotalLabel.setText(formatCurrency(pedido.getTotal()));
+            comboClientePedido.setSelectedItem(pedido.getCliente());
+            campoEstadoPedido.setText(pedido.getEstado());
+            campoHoraPedido.setText(pedido.getHora());
+            areaObservacionesPedido.setText(pedido.getObservaciones());
+            recargarLineasPedido(pedido);
+            etiquetaTotalPedido.setText(formatearMoneda(pedido.getTotal()));
         } else {
-            orderEstadoField.setText("Pendiente");
-            orderHoraField.setText("");
-            orderObservacionesArea.setText("");
-            pedidoItemsModel.clear();
-            orderTotalLabel.setText("$0.00");
+            campoEstadoPedido.setText("Pendiente");
+            campoHoraPedido.setText("");
+            areaObservacionesPedido.setText("");
+            modeloLineasPedido.clear();
+            etiquetaTotalPedido.setText("$0.00");
         }
     }
 
     private void generarFactura() {
-        Pedido pedido = (Pedido) facturaPedidoCombo.getSelectedItem();
+        Pedido pedido = (Pedido) comboPedidoFactura.getSelectedItem();
         if (pedido == null) {
-            showError("Seleccione un pedido para generar la factura.");
+            mostrarError("Seleccione un pedido para generar la factura.");
             return;
         }
-        int tipoPago = pagoCombo.getSelectedIndex();
+        int tipoPago = comboPago.getSelectedIndex();
         pedido.setTipo_de_pago(tipoPago);
         pedido.setEstado("Pago");
 
-        facturaPedidoCombo.setSelectedItem(pedido);
-        facturaPedidoCombo.repaint();
-        pedidoList.repaint();
-        updatePedidoSelection();
+        comboPedidoFactura.setSelectedItem(pedido);
+        comboPedidoFactura.repaint();
+        listadoPedidos.repaint();
+        actualizarSeleccionPedido();
 
         StringBuilder factura = new StringBuilder();
         factura.append("Factura para: ").append(pedido.getCliente().getNombre()).append("\n");
         factura.append("Pedido: ").append(pedido.getNombre()).append("\n");
         factura.append("Hora: ").append(pedido.getHora()).append("\n");
-        factura.append("Pago: ").append(pagoCombo.getSelectedItem()).append("\n\n");
+        factura.append("Pago: ").append(comboPago.getSelectedItem()).append("\n\n");
         factura.append("Productos:\n");
         for (LineaPedido linea : pedido.getFactura()) {
             factura.append("- ")
@@ -668,310 +677,301 @@ public class RestauranteUI extends JFrame {
                     .append(" x")
                     .append(linea.getCantidad())
                     .append(" : ")
-                    .append(formatCurrency(linea.getSubtotal()))
+                    .append(formatearMoneda(linea.getSubtotal()))
                     .append("\n");
         }
-        factura.append("\nSubtotal: ").append(formatCurrency(pedido.CalcularSubtotal())).append("\n");
-        factura.append("Impuesto 8%: ").append(formatCurrency(pedido.CalcularTotal() - pedido.CalcularSubtotal())).append("\n");
-        factura.append("Total: ").append(formatCurrency(pedido.getTotal())).append("\n");
+        factura.append("\nSubtotal: ").append(formatearMoneda(pedido.CalcularSubtotal())).append("\n");
+        factura.append("Impuesto 8%: ").append(formatearMoneda(pedido.CalcularTotal() - pedido.CalcularSubtotal())).append("\n");
+        factura.append("Total: ").append(formatearMoneda(pedido.getTotal())).append("\n");
 
-        facturaArea.setText(factura.toString());
+        areaFactura.setText(factura.toString());
     }
 
     private void calcularTotalDia() {
         double totalDia = 0;
-        for (Pedido pedido : restaurante.getPedidos().getFacturasList()) {
+        for (Pedido pedido : baseRestaurante.getPedidos().getFacturasList()) {
             totalDia += pedido.getTotal();
         }
-        totalDiaLabel.setText(formatCurrency(totalDia));
+        etiquetaTotalDia.setText(formatearMoneda(totalDia));
     }
 
-    private String formatCurrency(double value) {
+    private String formatearMoneda(double value) {
         return String.format("$%.2f", value);
     }
 
-    private void reloadPedidoItems(Pedido pedido) {
-        pedidoItemsModel.clear();
-        if (pedido != null) {
-            for (LineaPedido linea : pedido.getFactura()) {
-                pedidoItemsModel.addElement(linea);
-            }
-        }
-    }
-
-    private void addMesa() {
+    private void agregarMesa() {
         try {
-            int capacidad = Integer.parseInt(mesaCapacidadField.getText().trim());
+            int capacidad = Integer.parseInt(campoCapacidadMesa.getText().trim());
             if (capacidad <= 0) {
-                showError("La capacidad debe ser un número mayor que cero.");
+                mostrarError("La capacidad debe ser un número mayor que cero.");
                 return;
             }
-            restaurante.addMesa(1, capacidad);
-            reloadMesas();
+            baseRestaurante.addMesa(1, capacidad);
+            recargarMesas();
         } catch (NumberFormatException ex) {
-            showError("Ingrese un valor numérico válido para la capacidad.");
+            mostrarError("Ingrese un valor numérico válido para la capacidad.");
         }
     }
 
-    private void updateMesa() {
-        Mesa mesa = mesaList.getSelectedValue();
+    private void modificarMesa() {
+        Mesa mesa = listadoMesas.getSelectedValue();
         if (mesa == null) {
-            showError("Seleccione una mesa para modificarla.");
+            mostrarError("Seleccione una mesa para modificarla.");
             return;
         }
         try {
-            int capacidad = Integer.parseInt(mesaCapacidadField.getText().trim());
+            int capacidad = Integer.parseInt(campoCapacidadMesa.getText().trim());
             if (capacidad <= 0) {
-                showError("La capacidad debe ser un número mayor que cero.");
+                mostrarError("La capacidad debe ser un número mayor que cero.");
                 return;
             }
             mesa.setCapacidad(capacidad);
-            restaurante.saveMesas();
-            reloadMesas();
-            mesaList.setSelectedValue(mesa, true);
+            baseRestaurante.saveMesas();
+            recargarMesas();
+            listadoMesas.setSelectedValue(mesa, true);
         } catch (NumberFormatException ex) {
-            showError("Ingrese un valor numérico válido para la capacidad.");
+            mostrarError("Ingrese un valor numérico válido para la capacidad.");
         }
     }
 
-    private void deleteMesa() {
-        int index = mesaList.getSelectedIndex();
+    private void eliminarMesa() {
+        int index = listadoMesas.getSelectedIndex();
         if (index < 0) {
-            showError("Seleccione una mesa para eliminarla.");
+            mostrarError("Seleccione una mesa para eliminarla.");
             return;
         }
-        restaurante.deleteMesa(index);
-        reloadMesas();
+        baseRestaurante.deleteMesa(index);
+        recargarMesas();
     }
 
-    private void assignClienteAMesa() {
-        int mesaIndex = mesaList.getSelectedIndex();
-        Cliente cliente = (Cliente) mesaClienteCombo.getSelectedItem();
+    private void asignarClienteAMesa() {
+        int mesaIndex = listadoMesas.getSelectedIndex();
+        Cliente cliente = (Cliente) comboClienteMesa.getSelectedItem();
         if (mesaIndex < 0 || cliente == null) {
-            showError("Seleccione una mesa y un cliente para asignar.");
+            mostrarError("Seleccione una mesa y un cliente para asignar.");
             return;
         }
-        restaurante.assignClienteToMesa(mesaIndex, cliente);
-        reloadMesaClients(restaurante.getMesa(mesaIndex));
+        baseRestaurante.assignClienteToMesa(mesaIndex, cliente);
+        recargarClientesDeMesa(baseRestaurante.getMesa(mesaIndex));
     }
 
-    private void removeClienteDeMesa() {
-        int mesaIndex = mesaList.getSelectedIndex();
-        Cliente cliente = mesaClientesList.getSelectedValue();
+    private void removerClienteDeMesa() {
+        int mesaIndex = listadoMesas.getSelectedIndex();
+        Cliente cliente = listadoClientesMesa.getSelectedValue();
         if (mesaIndex < 0 || cliente == null) {
-            showError("Seleccione una mesa y un cliente para quitar.");
+            mostrarError("Seleccione una mesa y un cliente para quitar.");
             return;
         }
-        restaurante.removeClienteFromMesa(mesaIndex, cliente);
-        reloadMesaClients(restaurante.getMesa(mesaIndex));
+        baseRestaurante.removeClienteFromMesa(mesaIndex, cliente);
+        recargarClientesDeMesa(baseRestaurante.getMesa(mesaIndex));
     }
 
-    private void addCliente() {
-        String nombre = clienteNombreField.getText().trim();
+    private void agregarCliente() {
+        String nombre = campoNombreCliente.getText().trim();
         if (nombre.isEmpty()) {
-            showError("Ingrese el nombre del cliente.");
+            mostrarError("Ingrese el nombre del cliente.");
             return;
         }
         Cliente cliente = new Cliente(nombre, true);
-        restaurante.addCliente(cliente);
-        reloadClientes();
+        baseRestaurante.addCliente(cliente);
+        recargarClientes();
     }
 
-    private void updateCliente() {
-        Cliente cliente = clienteList.getSelectedValue();
+    private void modificarCliente() {
+        Cliente cliente = listadoClientes.getSelectedValue();
         if (cliente == null) {
-            showError("Seleccione un cliente para modificarlo.");
+            mostrarError("Seleccione un cliente para modificarlo.");
             return;
         }
-        String nombre = clienteNombreField.getText().trim();
+        String nombre = campoNombreCliente.getText().trim();
         if (nombre.isEmpty()) {
-            showError("Ingrese el nombre del cliente.");
+            mostrarError("Ingrese el nombre del cliente.");
             return;
         }
         cliente.setNombre(nombre);
-        reloadClientes();
-        clienteList.setSelectedValue(cliente, true);
-        populateOrderCombos();
+        recargarClientes();
+        listadoClientes.setSelectedValue(cliente, true);
+        llenarCombosPedido();
     }
 
-    private void deleteCliente() {
-        int index = clienteList.getSelectedIndex();
+    private void eliminarCliente() {
+        int index = listadoClientes.getSelectedIndex();
         if (index < 0) {
-            showError("Seleccione un cliente para eliminarlo.");
+            mostrarError("Seleccione un cliente para eliminarlo.");
             return;
         }
-        restaurante.deleteCliente(index);
-        reloadClientes();
-        populateOrderCombos();
+        baseRestaurante.deleteCliente(index);
+        recargarClientes();
+        llenarCombosPedido();
     }
 
-    private void assignClienteToMesaDesdeCliente() {
-        Cliente cliente = clienteList.getSelectedValue();
-        Mesa mesa = (Mesa) clienteMesaCombo.getSelectedItem();
-        int mesaIndex = clienteMesaCombo.getSelectedIndex();
+    private void asignarClienteDesdeCliente() {
+        Cliente cliente = listadoClientes.getSelectedValue();
+        Mesa mesa = (Mesa) comboMesasCliente.getSelectedItem();
+        int mesaIndex = comboMesasCliente.getSelectedIndex();
         if (cliente == null || mesa == null || mesaIndex < 0) {
-            showError("Seleccione un cliente y una mesa para asignar.");
+            mostrarError("Seleccione un cliente y una mesa para asignar.");
             return;
         }
-        restaurante.assignClienteToMesa(mesaIndex, cliente);
-        reloadAll();
-        clienteList.setSelectedValue(cliente, true);
+        baseRestaurante.assignClienteToMesa(mesaIndex, cliente);
+        actualizarPantalla();
+        listadoClientes.setSelectedValue(cliente, true);
     }
 
-    private void addProducto() {
-        String nombre = productoNombreField.getText().trim();
-        String tipo = productoTipoField.getText().trim();
-        String precioTexto = productoPrecioField.getText().trim();
+    private void agregarProducto() {
+        String nombre = campoNombreProducto.getText().trim();
+        String tipo = campoTipoProducto.getText().trim();
+        String precioTexto = campoPrecioProducto.getText().trim();
         if (nombre.isEmpty() || tipo.isEmpty() || precioTexto.isEmpty()) {
-            showError("Ingrese nombre, tipo y precio del producto.");
+            mostrarError("Ingrese nombre, tipo y precio del producto.");
             return;
         }
         try {
             double precio = Double.parseDouble(precioTexto);
             if (precio < 0) {
-                showError("El precio debe ser un valor positivo.");
+                mostrarError("El precio debe ser un valor positivo.");
                 return;
             }
-            Producto producto = new Producto(tipo, precio, nombre, productoDisponibleCheck.isSelected());
-            restaurante.addProducto(producto);
-            reloadProductos();
-            populateOrderCombos();
+            Producto producto = new Producto(tipo, precio, nombre, casillaDisponibleProducto.isSelected());
+            baseRestaurante.addProducto(producto);
+            recargarProductos();
+            llenarCombosPedido();
         } catch (NumberFormatException ex) {
-            showError("Ingrese un precio válido.");
+            mostrarError("Ingrese un precio válido.");
         }
     }
 
-    private void updateProducto() {
-        Producto producto = productoList.getSelectedValue();
+    private void modificarProducto() {
+        Producto producto = listadoProductos.getSelectedValue();
         if (producto == null) {
-            showError("Seleccione un producto para modificarlo.");
+            mostrarError("Seleccione un producto para modificarlo.");
             return;
         }
-        String nombre = productoNombreField.getText().trim();
-        String tipo = productoTipoField.getText().trim();
-        String precioTexto = productoPrecioField.getText().trim();
+        String nombre = campoNombreProducto.getText().trim();
+        String tipo = campoTipoProducto.getText().trim();
+        String precioTexto = campoPrecioProducto.getText().trim();
         if (nombre.isEmpty() || tipo.isEmpty() || precioTexto.isEmpty()) {
-            showError("Ingrese nombre, tipo y precio del producto.");
+            mostrarError("Ingrese nombre, tipo y precio del producto.");
             return;
         }
         try {
             double precio = Double.parseDouble(precioTexto);
             if (precio < 0) {
-                showError("El precio debe ser un valor positivo.");
+                mostrarError("El precio debe ser un valor positivo.");
                 return;
             }
             producto.setNombre(nombre);
             producto.setTipo(tipo);
             producto.setPrecio(precio);
-            producto.setDisponibilidad(productoDisponibleCheck.isSelected());
-            restaurante.saveMenu();
-            reloadProductos();
-            productoList.setSelectedValue(producto, true);
-            populateOrderCombos();
+            producto.setDisponibilidad(casillaDisponibleProducto.isSelected());
+            baseRestaurante.saveMenu();
+            recargarProductos();
+            listadoProductos.setSelectedValue(producto, true);
+            llenarCombosPedido();
         } catch (NumberFormatException ex) {
-            showError("Ingrese un precio válido.");
+            mostrarError("Ingrese un precio válido.");
         }
     }
 
-    private void deleteProducto() {
-        int index = productoList.getSelectedIndex();
+    private void eliminarProducto() {
+        int index = listadoProductos.getSelectedIndex();
         if (index < 0) {
-            showError("Seleccione un producto para eliminarlo.");
+            mostrarError("Seleccione un producto para eliminarlo.");
             return;
         }
-        restaurante.deleteProducto(index);
-        reloadProductos();
-        populateOrderCombos();
+        baseRestaurante.deleteProducto(index);
+        recargarProductos();
+        llenarCombosPedido();
     }
 
-    private void clearMenu() {
-        restaurante.clearMenu();
-        reloadProductos();
-        populateOrderCombos();
+    private void limpiarMenu() {
+        baseRestaurante.clearMenu();
+        recargarProductos();
+        llenarCombosPedido();
     }
 
-    private void createPedido() {
-        Cliente cliente = (Cliente) orderClienteCombo.getSelectedItem();
+    private void crearPedido() {
+        Cliente cliente = (Cliente) comboClientePedido.getSelectedItem();
         if (cliente == null) {
-            showError("Seleccione un cliente para el pedido.");
+            mostrarError("Seleccione un cliente para el pedido.");
             return;
         }
-        String estado = orderEstadoField.getText().trim();
+        String estado = campoEstadoPedido.getText().trim();
         if (estado.isEmpty()) {
             estado = "Pendiente";
         }
         String hora = new SimpleDateFormat("HH:mm").format(new Date());
-        String nombre = "Pedido " + (restaurante.getPedidos().getFacturasSize() + 1);
-        Pedido pedido = new Pedido(orderObservacionesArea.getText().trim(), estado, hora, cliente, nombre, true);
-        restaurante.addPedido(pedido);
-        reloadPedidos();
-        pedidoList.setSelectedValue(pedido, true);
+        String nombre = "Pedido " + (baseRestaurante.getPedidos().getFacturasSize() + 1);
+        Pedido pedido = new Pedido(areaObservacionesPedido.getText().trim(), estado, hora, cliente, nombre, true);
+        baseRestaurante.addPedido(pedido);
+        recargarPedidos();
+        listadoPedidos.setSelectedValue(pedido, true);
     }
 
-    private void savePedido() {
-        Pedido pedido = pedidoList.getSelectedValue();
+    private void guardarPedido() {
+        Pedido pedido = listadoPedidos.getSelectedValue();
         if (pedido == null) {
-            showError("Seleccione un pedido para guardar los cambios.");
+            mostrarError("Seleccione un pedido para guardar los cambios.");
             return;
         }
-        Cliente cliente = (Cliente) orderClienteCombo.getSelectedItem();
+        Cliente cliente = (Cliente) comboClientePedido.getSelectedItem();
         if (cliente == null) {
-            showError("Seleccione un cliente para el pedido.");
+            mostrarError("Seleccione un cliente para el pedido.");
             return;
         }
         pedido.setCliente(cliente);
-        pedido.setEstado(orderEstadoField.getText().trim());
-        pedido.setObservaciones(orderObservacionesArea.getText().trim());
-        reloadPedidos();
-        pedidoList.setSelectedValue(pedido, true);
+        pedido.setEstado(campoEstadoPedido.getText().trim());
+        pedido.setObservaciones(areaObservacionesPedido.getText().trim());
+        recargarPedidos();
+        listadoPedidos.setSelectedValue(pedido, true);
     }
 
-    private void deletePedido() {
-        int index = pedidoList.getSelectedIndex();
+    private void eliminarPedido() {
+        int index = listadoPedidos.getSelectedIndex();
         if (index < 0) {
-            showError("Seleccione un pedido para eliminarlo.");
+            mostrarError("Seleccione un pedido para eliminarlo.");
             return;
         }
-        restaurante.deletePedido(index);
-        reloadPedidos();
+        baseRestaurante.deletePedido(index);
+        recargarPedidos();
     }
 
-    private void addProductoAPedido() {
-        Pedido pedido = pedidoList.getSelectedValue();
-        Producto producto = (Producto) orderProductoCombo.getSelectedItem();
+    private void agregarProductoAPedido() {
+        Pedido pedido = listadoPedidos.getSelectedValue();
+        Producto producto = (Producto) comboProductoPedido.getSelectedItem();
         if (pedido == null || producto == null) {
-            showError("Seleccione un pedido y un producto para agregar.");
+            mostrarError("Seleccione un pedido y un producto para agregar.");
             return;
         }
         int cantidad;
         try {
-            cantidad = Integer.parseInt(orderCantidadField.getText().trim());
+            cantidad = Integer.parseInt(campoCantidadProducto.getText().trim());
             if (cantidad <= 0) {
-                showError("Ingrese una cantidad mayor que cero.");
+                mostrarError("Ingrese una cantidad mayor que cero.");
                 return;
             }
         } catch (NumberFormatException ex) {
-            showError("Ingrese una cantidad válida.");
+            mostrarError("Ingrese una cantidad válida.");
             return;
         }
         pedido.addProducto(producto, cantidad);
-        reloadPedidoItems(pedido);
-        orderTotalLabel.setText(formatCurrency(pedido.getTotal()));
+        recargarLineasPedido(pedido);
+        etiquetaTotalPedido.setText(formatearMoneda(pedido.getTotal()));
     }
 
-    private void removeProductoDePedido() {
-        Pedido pedido = pedidoList.getSelectedValue();
-        LineaPedido linea = pedidoItemsList.getSelectedValue();
+    private void removerProductoPedido() {
+        Pedido pedido = listadoPedidos.getSelectedValue();
+        LineaPedido linea = listadoLineasPedido.getSelectedValue();
         if (pedido == null || linea == null) {
-            showError("Seleccione un pedido y un producto para eliminar.");
+            mostrarError("Seleccione un pedido y un producto para eliminar.");
             return;
         }
         pedido.deleteProducto(linea);
-        reloadPedidoItems(pedido);
-        orderTotalLabel.setText(formatCurrency(pedido.getTotal()));
+        recargarLineasPedido(pedido);
+        etiquetaTotalPedido.setText(formatearMoneda(pedido.getTotal()));
     }
 
-    private void showError(String message) {
+    private void mostrarError(String message) {
         JOptionPane.showMessageDialog(this, message, "Error", JOptionPane.WARNING_MESSAGE);
     }
 }
