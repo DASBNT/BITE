@@ -7,8 +7,8 @@ import java.util.List;
 
 public class Restaurante {
     private static final String DATA_DIR = "data";
-    private static final String MESAS_FILE = DATA_DIR + File.separator + "mesas.dat";
-    private static final String MENU_FILE = DATA_DIR + File.separator + "menu.dat";
+    private static final String MESAS_FILE = DATA_DIR + File.separator + "mesas.txt";
+    private static final String MENU_FILE = DATA_DIR + File.separator + "menu.txt";
 
     private ArrayList<Mesa> mesas = new ArrayList<>();
     private ArrayList<Cliente> clientes = new ArrayList<>();
@@ -165,42 +165,72 @@ public class Restaurante {
         }
     }
 
-    @SuppressWarnings("unchecked")
     private void loadMesas() {
         File file = new File(MESAS_FILE);
         if (!file.exists()) {
             return;
         }
-        try (ObjectInputStream in = new ObjectInputStream(new FileInputStream(file))) {
-            Object object = in.readObject();
-            if (object instanceof ArrayList) {
-                mesas = (ArrayList<Mesa>) object;
+        ArrayList<Mesa> loadedMesas = new ArrayList<>();
+        try (BufferedReader reader = new BufferedReader(new FileReader(file))) {
+            String line;
+            while ((line = reader.readLine()) != null) {
+                line = line.trim();
+                if (line.isEmpty() || line.startsWith("#")) {
+                    continue;
+                }
+                try {
+                    int capacidad = Integer.parseInt(line);
+                    loadedMesas.add(new Mesa(capacidad));
+                } catch (NumberFormatException e) {
+                    // Ignorar líneas con formato inválido.
+                }
             }
-        } catch (IOException | ClassNotFoundException e) {
+            mesas = loadedMesas;
+        } catch (IOException e) {
             // Ignorar si no se puede leer el archivo de mesas.
         }
     }
 
-    @SuppressWarnings("unchecked")
     private void loadMenu() {
         File file = new File(MENU_FILE);
         if (!file.exists()) {
             return;
         }
-        try (ObjectInputStream in = new ObjectInputStream(new FileInputStream(file))) {
-            Object object = in.readObject();
-            if (object instanceof ArrayList) {
-                menu = (ArrayList<Producto>) object;
+        ArrayList<Producto> loadedMenu = new ArrayList<>();
+        try (BufferedReader reader = new BufferedReader(new FileReader(file))) {
+            String line;
+            while ((line = reader.readLine()) != null) {
+                line = line.trim();
+                if (line.isEmpty() || line.startsWith("#")) {
+                    continue;
+                }
+                String[] parts = line.split(";", -1);
+                if (parts.length < 4) {
+                    continue;
+                }
+                try {
+                    String nombre = parts[0];
+                    String tipo = parts[1];
+                    double precio = Double.parseDouble(parts[2]);
+                    boolean disponibilidad = Boolean.parseBoolean(parts[3]);
+                    loadedMenu.add(new Producto(tipo, precio, nombre, disponibilidad));
+                } catch (NumberFormatException e) {
+                    // Ignorar líneas con precio inválido.
+                }
             }
-        } catch (IOException | ClassNotFoundException e) {
+            menu = loadedMenu;
+        } catch (IOException e) {
             // Ignorar si no se puede leer el archivo de menú.
         }
     }
 
     public void saveMesas() {
         ensureDataDirectory();
-        try (ObjectOutputStream out = new ObjectOutputStream(new FileOutputStream(MESAS_FILE))) {
-            out.writeObject(mesas);
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter(MESAS_FILE))) {
+            for (Mesa mesa : mesas) {
+                writer.write(String.valueOf(mesa.getCapacidad()));
+                writer.newLine();
+            }
         } catch (IOException e) {
             // Ignorar error de guardado.
         }
@@ -208,8 +238,11 @@ public class Restaurante {
 
     public void saveMenu() {
         ensureDataDirectory();
-        try (ObjectOutputStream out = new ObjectOutputStream(new FileOutputStream(MENU_FILE))) {
-            out.writeObject(menu);
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter(MENU_FILE))) {
+            for (Producto producto : menu) {
+                writer.write(producto.getNombre() + ";" + producto.getTipo() + ";" + producto.getPrecio() + ";" + producto.isDisponibilidad());
+                writer.newLine();
+            }
         } catch (IOException e) {
             // Ignorar error de guardado.
         }
